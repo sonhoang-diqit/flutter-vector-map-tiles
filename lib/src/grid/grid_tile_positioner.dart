@@ -1,7 +1,7 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import '../tile_identity.dart';
 import 'constants.dart';
@@ -60,7 +60,7 @@ class GridTileSizer {
     if (effectiveScale != 1.0) {
       final referenceDimension = tileSize.x / translation.fraction;
       final scaledSize = effectiveScale * referenceDimension;
-      final maxDimension = max(size.width, size.height);
+      final maxDimension = math.max(size.width, size.height);
       if (scaledSize < maxDimension) {
         effectiveScale = maxDimension / referenceDimension;
       }
@@ -90,11 +90,11 @@ class TilePositioningState {
   late final CustomPoint<double> origin;
   late final CustomPoint<double> translate;
 
-  TilePositioningState(this.zoomScale, FlutterMapState mapState, double zoom) {
+  TilePositioningState(this.zoomScale, MapCamera mapState, double zoom) {
     final pixelOrigin =
         mapState.getNewPixelOrigin(mapState.center, mapState.zoom).round();
     origin = mapState.project(mapState.unproject(pixelOrigin, zoom), zoom);
-    translate = (origin * zoomScale) - pixelOrigin;
+    translate = (origin * zoomScale) - math.Point<double>(pixelOrigin.x.toDouble(), pixelOrigin.y.toDouble());
   }
 }
 
